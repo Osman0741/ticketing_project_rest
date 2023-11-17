@@ -4,6 +4,7 @@ import com.cydeo.enums.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -29,6 +30,7 @@ public class User extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "role_id")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL )
     private Role role;
 
     @Enumerated(EnumType.STRING)
