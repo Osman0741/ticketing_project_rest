@@ -21,26 +21,31 @@ public class UserController {
     }
 
     @GetMapping
+    @RolesAllowed({"MANAGER","ADMIN"})
     public ResponseEntity<ResponseWrapper> getUsers(){
         List<UserDTO> userDTOList = userService.listAllUsers();
         return ResponseEntity.ok(new ResponseWrapper("Users are successfully retrieved",userDTOList, HttpStatus.OK));
     }
     @GetMapping("/{username}")
+    @RolesAllowed("ADMIN")
     public ResponseEntity<ResponseWrapper> getUserByUserName(@PathVariable("username")String userName){
         UserDTO user = userService.findByUserName(userName);
         return ResponseEntity.ok(new ResponseWrapper("User is successfully retrieved",user, HttpStatus.OK));
     }
     @PostMapping
+    @RolesAllowed("ADMIN")
     public ResponseEntity<ResponseWrapper> createUser(@RequestBody UserDTO userDTO){
         userService.save(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("User is successfully created",HttpStatus.CREATED));
     }
     @PutMapping
+    @RolesAllowed("ADMIN")
     public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO user){
         userService.update(user);
         return ResponseEntity.ok(new ResponseWrapper("User is successfully updated",HttpStatus.OK));
     }
     @DeleteMapping("/{username}")
+    @RolesAllowed("ADMIN")
     public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("username")String userName){
         userService.delete(userName);
         return ResponseEntity.ok(new ResponseWrapper("User is successfully deleted",HttpStatus.OK));
