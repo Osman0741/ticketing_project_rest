@@ -1,5 +1,6 @@
 package com.cydeo.controller;
 
+import com.cydeo.annotation.ExecutionTime;
 import com.cydeo.dto.ResponseWrapper;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.exception.TicketingProjectException;
@@ -25,40 +26,45 @@ public class UserController {
         this.userService = userService;
     }
 
+    @ExecutionTime
     @GetMapping
-    @RolesAllowed({"MANAGER","ADMIN"})
+    @RolesAllowed({"MANAGER", "ADMIN"})
     @Operation(summary = "Get Users")
-    public ResponseEntity<ResponseWrapper> getUsers(){
+    public ResponseEntity<ResponseWrapper> getUsers() {
         List<UserDTO> userDTOList = userService.listAllUsers();
-        return ResponseEntity.ok(new ResponseWrapper("Users are successfully retrieved",userDTOList, HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Users are successfully retrieved", userDTOList, HttpStatus.OK));
     }
+    @ExecutionTime
     @GetMapping("/{username}")
     @RolesAllowed("ADMIN")
     @Operation(summary = "Get User by username")
-    public ResponseEntity<ResponseWrapper> getUserByUserName(@PathVariable("username")String userName){
+    public ResponseEntity<ResponseWrapper> getUserByUserName(@PathVariable("username") String userName) {
         UserDTO user = userService.findByUserName(userName);
-        return ResponseEntity.ok(new ResponseWrapper("User is successfully retrieved",user, HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("User is successfully retrieved", user, HttpStatus.OK));
     }
+
     @PostMapping
     @RolesAllowed("ADMIN")
     @Operation(summary = "Create User")
-    public ResponseEntity<ResponseWrapper> createUser(@Valid @RequestBody UserDTO userDTO){
+    public ResponseEntity<ResponseWrapper> createUser(@Valid @RequestBody UserDTO userDTO) {
         userService.save(userDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("User is successfully created",HttpStatus.CREATED));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("User is successfully created", HttpStatus.CREATED));
     }
+
     @PutMapping
     @RolesAllowed("ADMIN")
     @Operation(summary = "Update User")
-    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO user){
+    public ResponseEntity<ResponseWrapper> updateUser(@RequestBody UserDTO user) {
         userService.update(user);
-        return ResponseEntity.ok(new ResponseWrapper("User is successfully updated",HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("User is successfully updated", HttpStatus.OK));
     }
+
     @DeleteMapping("/{username}")
     @RolesAllowed("ADMIN")
     @Operation(summary = "Delete User")
-    public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("username")String userName) throws TicketingProjectException {
+    public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("username") String userName) throws TicketingProjectException {
         userService.delete(userName);
-        return ResponseEntity.ok(new ResponseWrapper("User is successfully deleted",HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("User is successfully deleted", HttpStatus.OK));
     }
 
 
